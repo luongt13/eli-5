@@ -1,6 +1,6 @@
 const {signUp, signIn, verify, changePassword, getUser, updateUser} = require("../controllers/users.js")
 const {Router} = require("express")
-const restrict = require("../helper/restrict.js")
+// const restrict = require("../helper/restrict.js")
 const router = Router()
 
 router.get("/users", getUser)

@@ -60,4 +60,29 @@ const updatePost = async (req,res) => {
     }
 }
 
-module.exports = {getPosts, getPost, createPost, updatePost}
+const changeLikes = async (req,res) => {
+    try {
+        let foundPost = await Post.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        if(foundPost) {
+            return res.status(200).json(foundPost)
+        } else {
+            return res.status(404).send("post not found")
+        }
+    } catch (err) {
+        return res.status(500).json({error: err.message})
+    }
+}
+
+const deletePost = async (req,res) => {
+    try {
+        let deletePost = await Post.findByIdAndDelete(req.params.id)
+        if (deletePost) {
+            return res.status(200).json(deletePost)
+        } else {
+            return res.status(404).send("post not found")
+        }
+    } catch (err) {
+        return res.status(500).json({error: err.message})
+    }
+}
+module.exports = {getPosts, getPost, createPost, updatePost, deletePost, changeLikes}

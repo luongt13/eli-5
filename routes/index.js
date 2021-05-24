@@ -6,3 +6,5 @@ const router = Router()
 
 router.use("/", userRouter)
 router.use("/posts", postRouter)
+
+module.exports = router
