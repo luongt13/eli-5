@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken")
-const { nextTick } = require("node:process")
 const TOKEN_KEY = "eli5isthebestappever"
 
 const restrict = (req, res) => {
