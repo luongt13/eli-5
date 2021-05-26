@@ -87,9 +87,18 @@ const changePassword = async (req,res) => {
     }
 }
 
+const getUsers = async (req,res) => {
+    try {
+        users = await User.find({})
+        return res.status(200).json(users)
+    } catch (err) {
+        return res.status(500).json({error: err.message})
+    }
+}
+
 const getUser = async (req,res) => {
     try {
-        const user = await User.findById(req.params.id) 
+        const user = await User.findById(req.params.id).populate("posts")
         if(user) {
             return res.status(200).json(user)
         } else {
@@ -113,4 +122,4 @@ const updateUser = async (req,res) => {
     }
 }
 
-module.exports = {signUp, signIn, verify, changePassword, getUser, updateUser}
+module.exports = {getUsers, signUp, signIn, verify, changePassword, getUser, updateUser}

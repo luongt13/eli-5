@@ -28,12 +28,12 @@ const getPost = async (req,res) => {
 
 const createPost = async (req,res) => {
     try {
-        let {title, body, category, user} = req.body
+        let {title, body, category, user_id} = req.body
         let newPost = {
-            title, body, category, user
+            title, body, category, user_id
         }
 
-        let foundUser = await User.findById(user)
+        let foundUser = await User.findById(user_id)
         let post = await Post.create(newPost)
 
         await User.findByIdAndUpdate(
