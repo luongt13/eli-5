@@ -16,8 +16,12 @@ const getQuestions = async (req,res) => {
 
 const getQuestion = async (req,res) => {
     try {
-        const question = await Question.findById(req.params.id)
-        if (post) {
+        const question = await Question.findById(req.params.id).populate({
+                path: "posts",
+                options: {sort: "-updatedAt"},
+                populate: "user_id"
+            }).populate("user_id")
+        if (question) {
             return res.status(200).json(question)
         } else {
             return res.status(404).send("question not found")

@@ -1,0 +1,36 @@
+.detail-container {
+    /* background-color: chartreuse; */
+    width: 80%;
+    margin: 0 auto;
+}
+.question-detail {
+    background-color: blueviolet;
+    padding: 10px;
+}
+
+.post-container {
+    /* background-color: aqua */
+}
+
+.post-detail {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    margin: 10px;
+    background-color: pink;
+    padding: 10px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    /* align-self: flex-end; */
+}
+
+.likes, .dislikes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+}

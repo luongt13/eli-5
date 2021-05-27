@@ -52,7 +52,7 @@ const signIn = async (req,res) => {
 const verify = async (req,res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
-        const payload = jwt.payload(token, TOKEN_KEY)
+        const payload = jwt.verify(token, TOKEN_KEY)
         if(payload) {
             return res.json(payload)
         } 
@@ -84,6 +84,15 @@ const changePassword = async (req,res) => {
         }
     } catch (err) {
         return res.status(400).json({error: err.message})
+    }
+}
+
+const findUser = async (req,res) => {
+    try {
+        user = await User.findOne(req.body)
+        return res.status(200).json(user)
+    } catch (err) {
+        return res.status(500).json({error: err.message})
     }
 }
 
@@ -122,4 +131,4 @@ const updateUser = async (req,res) => {
     }
 }
 
-module.exports = {getUsers, signUp, signIn, verify, changePassword, getUser, updateUser}
+module.exports = {getUsers, findUser, signUp, signIn, verify, changePassword, getUser, updateUser}

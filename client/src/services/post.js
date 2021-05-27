@@ -8,3 +8,12 @@ export const getPosts = async () => {
         throw err
     }
 }
+
+export const createPost = async (body) => {
+    try {
+        const res = await api.post("/posts", body)
+        return res.data
+    } catch (err) {
+        throw err
+    }
+}
