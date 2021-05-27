@@ -5,8 +5,9 @@ const userSchema = new Schema (
     {
         name: {type: String, required: true},
         email: {type: String, required: true},
-        password_digest: {type: String, minlength: 6, maxlength: 16, required: true},
-        posts: [{type: Schema.Types.ObjectId, ref: "Post"}]
+        password_digest: {type: String, required: true},
+        posts: [{type: Schema.Types.ObjectId, ref: "Post"}],
+        questions: [{type: Schema.Types.ObjectId, ref: "Question"}]
     },
     {timestamps: true}
 )

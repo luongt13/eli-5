@@ -1,10 +1,10 @@
-const {getPosts, getPost, createPost, updatePost, deletePost, changeLikes} = require("../controllers/posts.js")
+const {getPosts, createPost, updatePost, deletePost, changeLikes} = require("../controllers/posts.js")
 const {Router} = require("express")
 const restrict = require("../helper/restrict.js")
 const router = Router()
 
 router.get("/", getPosts)
-router.get("/:id", getPost)
+// router.get("/:id", getPost)
 router.post("/", createPost, restrict)
 router.put("/likes/:id", changeLikes)
 router.put("/:id", updatePost, restrict)
