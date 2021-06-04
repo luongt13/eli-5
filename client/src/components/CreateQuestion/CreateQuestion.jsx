@@ -12,7 +12,6 @@ export default function CreateQuestion(props) {
             user_id: props.userId
         }))
     }
-console.log(formData)
     async function handleSubmit(e) {
         e.preventDefault()
         await createQuestion(formData)

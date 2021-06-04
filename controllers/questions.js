@@ -18,7 +18,7 @@ const getQuestion = async (req,res) => {
     try {
         const question = await Question.findById(req.params.id).populate({
                 path: "posts",
-                options: {sort: "-updatedAt"},
+                options: {sort: "createdAt"},
                 populate: "user_id"
             }).populate("user_id")
         if (question) {

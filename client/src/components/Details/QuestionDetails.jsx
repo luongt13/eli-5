@@ -36,7 +36,7 @@ export default function QuestionDetails(props) {
                 {posts && posts.map(post => {
                     return (
                         <div key={post._id}>
-                            <PostDetails post={post}/>
+                            <PostDetails post={post} userData={props.userData} setToggle={setToggle}/>
                         </div>
                     )
                 })}

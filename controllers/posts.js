@@ -7,7 +7,7 @@ db.on("error", console.error.bind(console, "Mongo Connection Error"))
 
 const getPosts = async (req,res) => {
     try {
-        const posts = await Post.find({})
+        const posts = await Post.find({}).sort({'createdAt': 1})
         return res.status(200).json(posts)
     } catch (err) {
         return res.status(500).json({error: err.message})
@@ -29,9 +29,9 @@ const getPosts = async (req,res) => {
 
 const createPost = async (req,res) => {
     try {
-        let {body, likes, dislikes, user_id, question_id} = req.body
+        let {body, user_id, question_id} = req.body
         let newPost = {
-            body, user_id, likes, dislikes, question_id
+            body, user_id, question_id
         }
 
         let foundUser = await User.findById(user_id)
@@ -67,9 +67,67 @@ const updatePost = async (req,res) => {
 
 const changeLikes = async (req,res) => {
     try {
-        let foundPost = await Post.findByIdAndUpdate(req.params.id, req.body, {new: true})
-        if(foundPost) {
-            return res.status(200).json(foundPost)
+        let {user_id} = req.body
+        let foundUser = await User.findById(user_id)
+        let post = await Post.findById(req.params.id)
+        let foundLikes = await Post.find({_id: post._id, likes: [foundUser._id]})
+        let foundDislikes = await Post.find({dislikes: [foundUser._id]})
+
+        if(foundLikes.length === 0 && foundDislikes.length === 0) {
+            await Post.findByIdAndUpdate(
+                {_id: post._id},
+                {$push: {likes: foundUser._id}}
+            )
+        } else if (foundDislikes.length === 1 && foundLikes.length === 0) {
+            await Post.findOneAndUpdate(
+                {_id: post._id},
+                {$pull: {dislikes: foundUser._id}})
+            await Post.findByIdAndUpdate(
+                {_id: post._id},
+                {$push: {likes: foundUser._id}}
+            )
+        } else {
+            await Post.findOneAndUpdate(
+                {_id: post._id},
+                {$pull: {likes: foundUser._id}}
+            )
+        }
+
+        if(post) {
+            return res.status(200).json(post)
+        } else {
+            return res.status(404).send("post not found")
+        }
+    } catch (err) {
+        return res.status(500).json({error: err.message})
+    }
+}
+
+const changeDislikes = async (req,res) => {
+    try {
+        let {user_id} = req.body
+        let foundUser = await User.findById(user_id)
+        let post = await Post.findById(req.params.id)
+        let foundLikes = await Post.find({_id: post._id, likes: [foundUser._id]})
+        let foundDislikes = await Post.find({dislikes: [foundUser._id]})
+
+        if(foundLikes.length === 0 && foundDislikes.length === 0) {
+            await Post.findByIdAndUpdate(
+                {_id: post._id},
+                {$push: {dislikes: foundUser._id}}
+            )
+        } else if (foundDislikes.length === 0 && foundLikes.length === 1) {
+            console.log(post.likes)
+            await Post.findOneAndUpdate(
+                {_id: post._id},
+                {$pull: {likes: foundUser._id}})
+            await Post.findByIdAndUpdate(
+                {_id: post._id},
+                {$push: {dislikes: foundUser._id}}
+            )
+        }
+        if(post) {
+            return res.status(200).json(post)
         } else {
             return res.status(404).send("post not found")
         }
@@ -86,7 +144,7 @@ const deletePost = async (req,res) => {
         await foundQuestion.save()
 
         if (deletePost) {
-            return res.status(200).json(foundQuestion)
+            return res.status(200).json(deletePost)
         } else {
             return res.status(404).send("post not found")
         }
@@ -94,4 +152,4 @@ const deletePost = async (req,res) => {
         return res.status(500).json({error: err.message})
     }
 }
-module.exports = {getPosts, createPost, updatePost, deletePost, changeLikes}
+module.exports = {getPosts, createPost, updatePost, deletePost, changeLikes, changeDislikes}

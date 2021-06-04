@@ -10,8 +10,6 @@ export default function CreatePost(props) {
         setFormText((prevState) => ({
             ...prevState,
             body: e.target.value,
-            likes: 0,
-            dislikes: 0,
             question_id: id,
             user_id: props.userId
         }))
